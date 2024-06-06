@@ -1,32 +1,81 @@
-import React from "react";
+import React, { useState } from "react";
 import {
-  Container,
-  HeaderContainer,
-  HeaderImg,
-  Input,
-  Subtitle,
-  TitleColored,
-  TitleContainer,
-  TitleText,
-} from "./styles";
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 
-import Background from "../../assets/images/background.png";
-import Cloud from "../../assets/images/cloud.png";
+export default function App() {
+  const [peso, setPeso] = useState("");
+  const [altura, setAltura] = useState("");
 
-export default function Search() {
+  function handleSubmit() {
+    const alt = altura / 100;
+    const imc = peso / (alt * alt);
+
+    if (imc < 18.6) {
+      alert("Você está abaixo do peso: " + imc.toFixed(2));
+    } else if (imc >= 18.6 && imc < 24.9) {
+      alert("Peso ideal: " + imc.toFixed(2));
+    } else if (imc >= 24.9 && imc < 34.9) {
+      alert("Você está levemente acima do peso: " + imc.toFixed(2));
+    } else {
+      alert("Você está acima do peso: " + imc.toFixed(2));
+    }
+  }
+
   return (
-    <Container source={Background} resizeMode="cover">
-      <HeaderContainer>
-        <HeaderImg source={Cloud} />
-        <TitleText>TypeWeather</TitleText>
-      </HeaderContainer>
-      <TitleContainer>
-        <TitleText>
-          Boas vindas ao <TitleColored>TypeWeather</TitleColored>
-        </TitleText>
-        <Subtitle>Escolha um local para ver a previsão do tempo</Subtitle>
-      </TitleContainer>
-      <Input>Buscar Local</Input>
-    </Container>
+    <View style={styles.container}>
+      <Text style={styles.title}>Calcule seu IMC</Text>
+      <TextInput
+        style={styles.input}
+        value={peso}
+        onChangeText={(peso) => setPeso(peso)}
+        placeholder="Peso (Kg)"
+        keyboardType="numeric"
+      />
+      <TextInput
+        style={styles.input}
+        value={altura}
+        onChangeText={(altura) => setAltura(altura)}
+        placeholder="Altura (cm)"
+        keyboardType="numeric"
+      />
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>Calcular</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  title: {
+    textAlign: "center",
+    marginTop: 25,
+    fontSize: 30,
+  },
+  input: {
+    backgroundColor: "#121212",
+    borderRadius: 10,
+    margin: 15,
+    padding: 10,
+    color: "#fff",
+    fontSize: 20,
+  },
+  button: {
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 15,
+    backgroundColor: "#41Aef4",
+    padding: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 25,
+  },
+});
